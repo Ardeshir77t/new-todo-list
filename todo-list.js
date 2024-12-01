@@ -1,36 +1,58 @@
 const AddButton = document.querySelector(`.add-button`);
 const inputBox = document.querySelector(`.input-box`);
 let newTaskDiv = document.querySelector(`.tasks`);
+let totalTasks = document.querySelector(`.total-tasks`);
+let taskNo = 0;
 
 getData();
 function getData() {
   newTaskDiv.innerHTML = localStorage.getItem(`data1`);
-  console.log(newTaskDiv);
+  totalTasks.innerHTML = localStorage.getItem(`data2`);
+  taskNo = Number(localStorage.getItem(`data3`));
+
+  //console.log(newTaskDiv);
 }
 function saveData() {
   localStorage.setItem(`data1`, newTaskDiv.innerHTML);
+  localStorage.setItem(`data2`, totalTasks.innerHTML);
+  localStorage.setItem(`data3`, taskNo);
 }
 
-AddButton.onclick = function () {
+function createTodo() {
   if (inputBox.value.trim() === "") {
     alert(`write something `);
   } else {
-    console.log(inputBox.value);
+    taskNo = taskNo + 1;
     newTaskDiv.innerHTML += `<div class="new-tasks"><span class="task-span">${inputBox.value}</span><button class="delete-button"><img src="image/icons8-bin-24.png"></button></div>`;
+    totalTasks.innerHTML = `<div class="total-task-div"><span class="total-task-span">you have ${taskNo} peneding task</span><button class="total-task-button"><img class="total-task-img" src="image/icons8-bin-24.png"></button></div>`;
 
+    inputBox.value = "";
+    saveData();
+  }
+}
+newTaskDiv.addEventListener(`click`, (e) => {
+  if (e.target.tagName === `IMG` || e.target.tagName === `BUTTON`) {
     let currentTask = document.querySelectorAll(`.delete-button`);
-    // console.log(currentTask);
+
     for (let i = 0; i < currentTask.length; i = i + 1) {
       currentTask[i].onclick = function () {
-        //console.log(this);
-        //console.log(currentTask[i].parentNode);
-        currentTask[i].parentNode.remove();
-        saveData();
+        taskNo = taskNo - 1;
+        if (taskNo === 0) {
+          taskNo = 0;
+          newTaskDiv.innerHTML = "";
+          totalTasks.innerHTML = "";
+          saveData();
+        } else {
+          taskNo = taskNo;
+          currentTask[i].parentNode.remove();
+
+          totalTasks.innerHTML = `<div class="total-task-div"><span class="total-task-span">you have ${taskNo} peneding task</span><button class="total-task-button"><img class="total-task-img" src="image/icons8-bin-24.png"></button></div>`;
+          saveData();
+        }
       };
     }
 
     let tasks = document.querySelectorAll(`.task-span`);
-    //console.log(tasks);
 
     for (let i = 0; i < tasks.length; i = i + 1) {
       //just for testing console.log(this);
@@ -41,8 +63,20 @@ AddButton.onclick = function () {
         //tasks.classList.toggle(`compeleted`);saveData()
       };
     }
-
-    inputBox.value = "";
-    saveData();
   }
-};
+});
+totalTasks.addEventListener(`click`, (e) => {
+  if (e.target.tagName === `IMG` || e.target.tagName === `BUTTON`) {
+    let newTasks = document.querySelectorAll(`.new-tasks`);
+    let totalTaskButton = document.querySelector(`.total-task-button`);
+    totalTaskButton.onclick = function () {
+      totalTaskButton.parentElement.remove();
+      for (let i = 0; i < newTasks.length; i = i + 1) {
+        newTasks[i].remove();
+        saveData();
+      }
+
+      taskNo = 0;
+    };
+  }
+});
