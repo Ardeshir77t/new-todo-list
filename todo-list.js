@@ -66,17 +66,18 @@ newTaskDiv.addEventListener(`click`, (e) => {
   }
 });
 totalTasks.addEventListener(`click`, (e) => {
-  if (e.target.tagName === `IMG` || e.target.tagName === `BUTTON`) {
-    let newTasks = document.querySelectorAll(`.new-tasks`);
+  if (e.target.tagName === `IMG`) {
     let totalTaskButton = document.querySelector(`.total-task-button`);
-    totalTaskButton.onclick = function () {
-      totalTaskButton.parentElement.remove();
-      for (let i = 0; i < newTasks.length; i = i + 1) {
-        newTasks[i].remove();
-        saveData();
-      }
 
-      taskNo = 0;
-    };
+    newTaskDiv.innerHTML = "";
+    //this code wont work beacuse the parent element for img is the button not the div e.target.parentElement.remove();
+    totalTaskButton.parentElement.remove();
+    taskNo = 0;
+    saveData();
+  } else if (e.target.tageName === `BUTTON`) {
+    e.target.parentElement.remove();
+    newTaskDiv.innerHTML = "";
+    taskNo = 0;
+    saveData();
   }
 });

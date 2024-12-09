@@ -5,6 +5,7 @@
 }
 body {
   height: 100vh;
+  padding-bottom: 1000px;
   background: linear-gradient(135deg, yellow, blue);
 }
 .container {
@@ -125,4 +126,23 @@ body {
 .total-task-div img {
   width: 30px;
   height: 30px;
+}
+
+@media all and (max-width: 480px) {
+  body {
+    width: 100%;
+    padding-bottom: 1000px;
+  }
+  .container {
+    width: 100%;
+  }
+  .new-task {
+    width: 100%;
+  }
+  .task {
+    width: 70%;
+  }
+  .total-tasks {
+    width: 100%;
+  }
 }
